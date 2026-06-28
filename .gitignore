@@ -1,0 +1,9 @@
+# ==========================================================
+# IFQ582 Indigenous Digital Library
+# Git Ignore File
+#
+# Files and folders listed here will NOT be tracked by Git.
+# ==========================================================
+
+# Personal Learning Library
+learning/
