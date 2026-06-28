@@ -94,3 +94,81 @@ def get_all_collection_items():
 # ==========================================================
 # ==========================================================
 # ==========================================================
+
+# ==========================================================
+# Retrieve One Collection Item
+# ==========================================================
+#
+# This function retrieves a single collection item using
+# its item_id primary key.
+#
+# This supports the Item Details page.
+#
+# Example:
+# /collection/3
+#
+# ==========================================================
+
+def get_collection_item_by_id(item_id):
+
+    connection = get_database_connection()
+
+    cursor = connection.cursor(dictionary=True)
+
+    query = """
+        SELECT *
+        FROM collection_items
+        WHERE item_id = %s;
+    """
+
+    cursor.execute(query, (item_id,))
+
+    item = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    return item
+
+# ==========================================================
+# Search Collection Items
+# ==========================================================
+#
+# This function searches collection items by title or
+# description.
+#
+# It uses SQL LIKE to find partial matches.
+#
+# Example:
+# Searching for "basket" will match:
+# "Woven Basket Collection"
+#
+# The % symbols mean:
+# match anything before or after the search term.
+#
+# ==========================================================
+
+def search_collection_items(search_term):
+
+    connection = get_database_connection()
+
+    cursor = connection.cursor(dictionary=True)
+
+    query = """
+        SELECT *
+        FROM collection_items
+        WHERE title LIKE %s
+           OR description LIKE %s
+        ORDER BY title;
+    """
+
+    search_pattern = f"%{search_term}%"
+
+    cursor.execute(query, (search_pattern, search_pattern))
+
+    items = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return items

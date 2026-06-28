@@ -24,11 +24,13 @@
 # Import Required Libraries
 # ----------------------------------------------------------
 
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, request
 
 # Import database functions from the Model layer
 from models.database import get_database_connection
 from models.database import get_all_collection_items
+from models.database import get_collection_item_by_id
+from models.database import search_collection_items
 
 
 # ----------------------------------------------------------
@@ -70,39 +72,80 @@ def database_test():
 
     return "<h2>❌ Database connection failed.</h2>"
 
-
+# ==========================================================
+# ==========================================================
+# ==========================================================
+# ==========================================================
 # ----------------------------------------------------------
 # Browse Collection Route
 # ----------------------------------------------------------
 #
-# This route displays all collection items stored in MySQL.
+# This route displays collection items.
 #
-# MVC flow:
+# If the user enters a search term, Flask sends that term
+# to the Model layer and retrieves matching records.
 #
-# Browser requests /collections
-#        ↓
-# Flask runs this route
-#        ↓
-# Route calls get_all_collection_items()
-#        ↓
-# database.py retrieves records from MySQL
-#        ↓
-# Records are passed to collections.html
-#        ↓
-# Browser displays the collection page
+# If no search term is entered, all collection items are
+# displayed.
+#
+# Example:
+#
+# /collections
+# /collections?search=basket
 #
 # ----------------------------------------------------------
 
 @app.route("/collections")
 def collections():
 
-    # Retrieve all collection items from the database
-    items = get_all_collection_items()
+    search_term = request.args.get("search", "")
 
-    # Send the items to the HTML template
-    return render_template("collections.html", items=items)
+    if search_term:
 
+        items = search_collection_items(search_term)
 
+    else:
+
+        items = get_all_collection_items()
+
+    return render_template(
+        "collections.html",
+        items=items,
+        search_term=search_term
+    )
+
+# ==========================================================
+# ==========================================================
+# ==========================================================
+# ==========================================================
+# ----------------------------------------------------------
+# Collection Item Details Route
+# ----------------------------------------------------------
+#
+# This route displays one collection item based on its
+# item_id from the database.
+#
+# Example:
+#
+# /collection/1
+# /collection/2
+# /collection/3
+#
+# ----------------------------------------------------------
+
+@app.route("/collection/<int:item_id>")
+def collection_detail(item_id):
+
+    item = get_collection_item_by_id(item_id)
+
+    if item is None:
+        return "<h2>Collection item not found.</h2>", 404
+
+    return render_template("collection_detail.html", item=item)
+
+# ==========================================================
+# ==========================================================
+# ==========================================================
 # ==========================================================
 # Main Program
 # ==========================================================

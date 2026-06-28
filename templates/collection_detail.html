@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ==========================================================
+     Collection Item Details Page
+
+     PURPOSE
+     -------
+     Displays a single collection item retrieved from the
+     MySQL database.
+
+     This page demonstrates how Flask retrieves one record
+     using its primary key (item_id) and passes it to the
+     HTML template.
+
+     MVC Flow
+
+     Browser
+          │
+          ▼
+     Flask Route
+          │
+          ▼
+     database.py
+          │
+          ▼
+     MySQL Database
+          │
+          ▼
+     collection_detail.html
+
+========================================================== -->
+
+<div class="page-container">
+
+    <section class="detail-card">
+
+        <!-- ==================================================
+             Back Button
+        =================================================== -->
+
+        <a href="{{ url_for('collections') }}" class="back-link">
+
+            ← Back to Browse Collection
+
+        </a>
+
+
+        <!-- ==================================================
+             Collection Title
+        =================================================== -->
+
+        <h1>
+
+            {{ item.title }}
+
+        </h1>
+
+
+        <!-- ==================================================
+             Collection Metadata
+        =================================================== -->
+
+        <div class="detail-meta">
+
+            <p>
+
+                <strong>Status:</strong>
+
+                {% if item.status == "Public" %}
+
+                    <span class="status-badge status-public">
+                        {{ item.status }}
+                    </span>
+
+                {% elif item.status == "Restricted" %}
+
+                    <span class="status-badge status-restricted">
+                        {{ item.status }}
+                    </span>
+
+                {% elif item.status == "Pending Review" %}
+
+                    <span class="status-badge status-pending">
+                        {{ item.status }}
+                    </span>
+
+                {% else %}
+
+                    <span class="status-badge">
+                        {{ item.status }}
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+            <p>
+
+                <strong>Added:</strong>
+
+                {{ item.created_date }}
+
+            </p>
+
+        </div>
+
+
+        <!-- ==================================================
+             Divider
+        =================================================== -->
+
+        <hr class="detail-divider">
+
+
+        <!-- ==================================================
+             Description
+        =================================================== -->
+
+        <h2>Description</h2>
+
+        <p class="detail-description">
+
+            {{ item.description }}
+
+        </p>
+
+
+        <!-- ==================================================
+             Restricted Access Notice
+
+             Only displayed when the item has a
+             "Restricted" status.
+
+             Public items do not require an access request.
+        =================================================== -->
+
+        {% if item.status == "Restricted" %}
+
+        <div class="restricted-notice">
+
+            <h3>Restricted Access</h3>
+
+            <p>
+
+                This collection item may contain culturally
+                sensitive knowledge or materials.
+
+                Access requires review and approval by an
+                authorised community reviewer before the
+                content can be viewed.
+
+            </p>
+
+            <a href="#" class="btn">
+
+                Request Access
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ==================================================
+             Future Enhancements
+
+             Additional metadata can be displayed here in
+             later milestones, including:
+
+             • Community
+             • Collection Type
+             • Cultural Protocol
+             • Contributor
+             • Collection Image
+             • Traditional Owner
+             • Access History
+
+        =================================================== -->
+
+    </section>
+
+</div>
+
+{% endblock %}

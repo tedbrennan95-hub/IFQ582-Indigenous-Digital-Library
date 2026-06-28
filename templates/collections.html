@@ -39,9 +39,52 @@
         within the Indigenous Digital Library.
     </p>
 
+    <!-- ======================================================
+        Search Form
+
+        The form uses GET, which means the search term appears
+        in the URL.
+
+        Example:
+        /collections?search=basket
+
+    ======================================================= -->
+
+    <form method="GET" action="{{ url_for('collections') }}" class="search-form">
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search by title or description..."
+            value="{{ search_term }}"
+            class="search-input">
+
+        <button type="submit" class="search-button">
+            Search
+        </button>
+
+        {% if search_term %}
+
+            <a href="{{ url_for('collections') }}" class="clear-search">
+                Clear
+            </a>
+
+        {% endif %}
+
+    </form>
+
     <p class="collection-count">
 
-        Showing <strong>{{ items|length }}</strong> collection items
+        {% if search_term %}
+
+            Showing <strong>{{ items|length }}</strong> results for
+            <strong>"{{ search_term }}"</strong>
+
+        {% else %}
+
+            Showing <strong>{{ items|length }}</strong> collection items
+
+        {% endif %}
 
     </p>
 
@@ -106,10 +149,8 @@
 
         </p>
 
-        <a href="#" class="btn">
-
+        <a href="{{ url_for('collection_detail', item_id=item.item_id) }}" class="btn">
             View Details
-
         </a>
 
     </div>

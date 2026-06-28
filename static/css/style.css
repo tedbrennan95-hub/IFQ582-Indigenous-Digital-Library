@@ -278,7 +278,10 @@ body {
     }
 }
 
-
+/* ==========================================================
+/* ==========================================================
+/* ==========================================================
+/* ==========================================================
 /* ==========================================================
    Browse Collection Page
    ----------------------------------------------------------
@@ -477,4 +480,298 @@ body {
 
     background:#4b2d1f;
 
+}
+
+/* ==========================================================
+/* ==========================================================
+/* ==========================================================
+/* ==========================================================
+   Collection Detail Page
+   ----------------------------------------------------------
+   These styles control the appearance of the Item Details
+   page.
+
+   The page displays a single collection item retrieved
+   from the MySQL database using its unique item_id.
+
+   MVC Flow
+
+   Browser
+       │
+       ▼
+   Flask Route
+       │
+       ▼
+   database.py
+       │
+       ▼
+   MySQL
+       │
+       ▼
+   collection_detail.html
+       │
+       ▼
+   CSS Styling
+
+========================================================== */
+
+.detail-card {
+
+    background: #ffffff;
+
+    max-width: 1000px;
+
+    margin: 40px auto;
+
+    padding: 40px;
+
+    border-radius: 18px;
+
+    border: 1px solid #e6e2db;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,.10);
+
+}
+
+
+/* ==========================================================
+   Back Link
+========================================================== */
+
+.back-link {
+
+    display: inline-block;
+
+    margin-bottom: 25px;
+
+    color: #6d442c;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    transition: .25s;
+
+}
+
+.back-link:hover {
+
+    color: #3f2518;
+
+    text-decoration: underline;
+
+}
+
+
+/* ==========================================================
+   Item Title
+========================================================== */
+
+.detail-card h1 {
+
+    color: #2f1b12;
+
+    margin-top: 0;
+
+    margin-bottom: 25px;
+
+    font-size: 2.2rem;
+
+}
+
+
+/* ==========================================================
+   Metadata Section
+========================================================== */
+
+.detail-meta {
+
+    margin-bottom: 20px;
+
+}
+
+.detail-meta p {
+
+    margin-bottom: 15px;
+
+    font-size: 1.05rem;
+
+}
+
+
+/* ==========================================================
+   Status Badge
+========================================================== */
+
+.detail-meta .status-badge {
+
+    padding: 8px 18px;
+
+    margin-left: 10px;
+
+    font-size: .95rem;
+
+}
+
+
+/* ==========================================================
+   Divider
+========================================================== */
+
+.detail-divider {
+
+    margin: 35px 0;
+
+    border: none;
+
+    border-top: 1px solid #dddddd;
+
+}
+
+
+/* ==========================================================
+   Description
+========================================================== */
+
+.detail-card h2 {
+
+    color: #3a2419;
+
+    margin-bottom: 15px;
+
+}
+
+.detail-description {
+
+    font-size: 1.1rem;
+
+    line-height: 1.9;
+
+    color: #444444;
+
+}
+
+
+/* ==========================================================
+   Restricted Access Box
+========================================================== */
+
+.restricted-notice {
+
+    margin-top: 40px;
+
+    padding: 28px;
+
+    background: #fff5f5;
+
+    border-left: 6px solid #991b1b;
+
+    border-radius: 12px;
+
+}
+
+.restricted-notice h3 {
+
+    margin-top: 0;
+
+    margin-bottom: 15px;
+
+    color: #991b1b;
+
+}
+
+.restricted-notice p {
+
+    line-height: 1.7;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* ==========================================================
+   Detail Page Button
+========================================================== */
+
+.restricted-notice .btn {
+
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    background: #6d442c;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    transition: .25s;
+
+}
+
+.restricted-notice .btn:hover {
+
+    background: #4a2d1d;
+
+}
+
+
+/* ==========================================================
+/* ==========================================================
+/* ==========================================================
+/* ==========================================================
+   Search Form
+========================================================== */
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 260px;
+    padding: 12px 14px;
+    border: 1px solid #d6d0c8;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #6d442c;
+    box-shadow: 0 0 0 3px rgba(109, 68, 44, 0.15);
+}
+
+.search-button {
+    padding: 12px 22px;
+    background: #6d442c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background: #4a2d1d;
+}
+
+.clear-search {
+    display: inline-flex;
+    align-items: center;
+    color: #6d442c;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.clear-search:hover {
+    text-decoration: underline;
 }
