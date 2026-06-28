@@ -23,7 +23,7 @@ body {
 .site-header {
     background-color: #5a3825;
     color: white;
-    padding: 26px 0;
+    padding: 22px 0;
 }
 
 .header-content {
@@ -35,7 +35,7 @@ body {
 
 .header-text h1 {
     margin: 0;
-    font-size: 2.3rem;
+    font-size: 2.2rem;
 }
 
 .header-text p {
@@ -48,10 +48,11 @@ body {
 }
 
 .header-flags img {
-    width: 95px;
+    width: 82px;
     border-radius: 6px;
     box-shadow: 0 3px 10px rgba(0,0,0,.25);
 }
+
 
 /* ==========================================================
    Navigation
@@ -59,24 +60,97 @@ body {
 
 .site-nav {
     background-color: #2f1f17;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-.nav-links {
+.site-nav nav {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+
     display: flex;
-    gap: 28px;
-    padding: 14px 0;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 13px 0;
 }
 
-.nav-links a {
-    color: white;
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+nav a {
+    color: #ffffff;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
 }
 
-.nav-links a:hover {
-    color: #f0c27b;
+nav a:hover {
+    color: #d9b38c;
+    text-decoration: none;
 }
 
+.nav-user {
+    color: #f2e6dc;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.nav-user strong {
+    color: #ffffff;
+}
+
+.logout-link {
+    color: #ffdddd;
+}
+
+.logout-link:hover {
+    color: #ffffff;
+}
+
+
+/* ==========================================================
+   Responsive Design
+========================================================== */
+
+@media (max-width: 900px) {
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .site-nav nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .nav-left,
+    .nav-right {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .hero-banner img {
+        height: 240px;
+    }
+
+    .hero h2 {
+        font-size: 2.2rem;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
 /* ==========================================================
    Main Content
 ========================================================== */
@@ -327,7 +401,6 @@ body {
 /* ==========================================================
    Collection Grid
 ========================================================== */
-
 .collection-grid {
 
     display: grid;
@@ -340,7 +413,6 @@ body {
 /* ==========================================================
    Collection Card
 ========================================================== */
-
 .collection-card {
 
     background: white;
@@ -404,7 +476,6 @@ body {
 /* ==========================================================
    Status Badges
 ========================================================== */
-
 .status-badge{
 
     display:inline-block;
@@ -448,7 +519,6 @@ body {
 /* ==========================================================
    Buttons
 ========================================================== */
-
 .btn{
 
     display:inline-block;
@@ -477,7 +547,6 @@ body {
 }
 
 .btn:hover{
-
     background:#4b2d1f;
 
 }
@@ -774,4 +843,31 @@ body {
 
 .clear-search:hover {
     text-decoration: underline;
+}
+
+/* ==========================================
+   Status Badges
+========================================== */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-public {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-restricted {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
 }

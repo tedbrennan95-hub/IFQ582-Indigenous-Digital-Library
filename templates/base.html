@@ -68,24 +68,57 @@
 
     </header>
 
-
     <!-- =====================================================
-         Site Navigation
-    ====================================================== -->
+        Site Navigation
+    ===================================================== -->
 
-    <nav class="site-nav">
+    <div class="site-nav">
 
-        <div class="container nav-links">
+        <nav>
 
-            <a href="{{ url_for('home') }}">Home</a>
-            <a href="#">Collections</a>
-            <a href="#">Request Access</a>
-            <a href="#">Community Review</a>
-            <a href="#">Login</a>
+            <div class="nav-left">
 
-        </div>
+                <a href="{{ url_for('home') }}">Home</a>
 
-    </nav>
+                <a href="{{ url_for('collections') }}">Collections</a>
+
+                {% if session.get("user_id") %}
+                    <a href="{{ url_for('my_requests') }}">My Requests</a>
+
+                    {% if session.get("user_role") in ["Community Reviewer", "Administrator", "admin"] %}
+                        <a href="#" title="Coming in Milestone 5">Community Review</a>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+
+            <div class="nav-right">
+
+                {% if session.get("user_id") %}
+
+                    <span class="nav-user">
+
+                        👤 <strong>{{ session.get("user_name") }}</strong>
+
+                        ({{ session.get("user_role") }})
+
+                    </span>
+
+                    <a class="logout-link" href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+
+                {% else %}
+
+                    <a href="{{ url_for('login') }}">Login</a>
+
+                {% endif %}
+
+            </div>
+
+        </nav>
+
+    </div>
 
 
     <!-- =====================================================

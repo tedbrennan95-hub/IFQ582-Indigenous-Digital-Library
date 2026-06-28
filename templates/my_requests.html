@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <section class="detail-card">
+
+        <h1>My Access Requests</h1>
+
+        <p>
+            View the status of your submitted access requests for restricted collection items.
+        </p>
+
+        {% if requests %}
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Collection Item</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Request Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for request in requests %}
+
+                    <tr>
+                        <td>{{ request.request_id }}</td>
+
+                        <td>
+                            <a href="{{ url_for('collection_detail', item_id=request.item_id) }}">
+                                {{ request.title }}
+                            </a>
+                        </td>
+
+                        <td>{{ request.reason }}</td>
+
+                        <td>
+                            {% if request.request_status == "Approved" %}
+                                <span class="status-badge status-public">
+                                    ✅ {{ request.request_status }}
+                                </span>
+                            {% elif request.request_status == "Rejected" %}
+                                <span class="status-badge status-restricted">
+                                    ❌ {{ request.request_status }}
+                                </span>
+                            {% else %}
+                                <span class="status-badge status-pending">
+                                    ⏳ {{ request.request_status }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ request.request_date }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        {% else %}
+
+            <div class="restricted-notice">
+                <h3>No requests submitted</h3>
+                <p>
+                    You have not submitted any access requests yet.
+                </p>
+                <a href="{{ url_for('collections') }}" class="btn">
+                    Browse Collections
+                </a>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}
