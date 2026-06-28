@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         Page Metadata
+    ====================================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+            Indigenous Digital Library
+        {% endblock %}
+    </title>
+
+    <!-- =====================================================
+         Main Stylesheet
+    ====================================================== -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         Site Header
+         -----------------------------------------------------
+         Shared across every page.
+         Flags are placed here so they appear consistently.
+    ====================================================== -->
+
+    <header class="site-header">
+
+        <div class="container header-content">
+
+            <div class="header-text">
+
+                <h1>Indigenous Digital Library</h1>
+
+                <p>
+                    Supporting respectful discovery, access and review
+                    of culturally significant collection items.
+                </p>
+
+            </div>
+
+            <div class="header-flags">
+
+                <img
+                    src="{{ url_for('static', filename='images/flag_aboriginal.jpg') }}"
+                    alt="Australian Aboriginal Flag"
+                >
+
+                <img
+                    src="{{ url_for('static', filename='images/flag_torres_strait.jpg') }}"
+                    alt="Torres Strait Islander Flag"
+                >
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         Site Navigation
+    ====================================================== -->
+
+    <nav class="site-nav">
+
+        <div class="container nav-links">
+
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="#">Collections</a>
+            <a href="#">Request Access</a>
+            <a href="#">Community Review</a>
+            <a href="#">Login</a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         Main Page Content
+    ====================================================== -->
+
+    <main class="container page-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- =====================================================
+         Site Footer
+    ====================================================== -->
+
+    <footer class="site-footer">
+
+        <div class="container">
+
+            <p>
+                IFQ582 Rapid Web Development with Databases |
+                Assignment 2 | Ted Brennan
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-container">
+
+<!-- ==========================================================
+     Browse Collection Page
+
+     PURPOSE
+     -------
+     Displays all collection items retrieved from the
+     MySQL database.
+
+     MVC Flow
+
+     Browser
+          │
+          ▼
+     Flask Route (/collections)
+          │
+          ▼
+     database.py
+          │
+          ▼
+     MySQL Database
+          │
+          ▼
+     collections.html
+
+========================================================== -->
+
+<section class="page-header">
+
+    <h1>Browse Indigenous Collection</h1>
+
+    <p>
+        Explore culturally significant collection items held
+        within the Indigenous Digital Library.
+    </p>
+
+    <p class="collection-count">
+
+        Showing <strong>{{ items|length }}</strong> collection items
+
+    </p>
+
+</section>
+
+
+<!-- ==========================================================
+     Collection Cards
+========================================================== -->
+
+<section class="collection-grid">
+
+    {% for item in items %}
+
+    <div class="collection-card">
+
+        <h2>🏺 {{ item.title }}</h2>
+
+        <p class="description">
+
+            {{ item.description }}
+
+        </p>
+
+        <p>
+
+            <strong>Status:</strong>
+
+            {% if item.status == "Public" %}
+
+                <span class="status-badge status-public">
+                    {{ item.status }}
+                </span>
+
+            {% elif item.status == "Restricted" %}
+
+                <span class="status-badge status-restricted">
+                    {{ item.status }}
+                </span>
+
+            {% elif item.status == "Pending Review" %}
+
+                <span class="status-badge status-pending">
+                    {{ item.status }}
+                </span>
+
+            {% else %}
+
+                <span class="status-badge">
+                    {{ item.status }}
+                </span>
+
+            {% endif %}
+
+        </p>
+
+        <p class="created-date">
+
+            <strong>Added:</strong>
+
+            {{ item.created_date }}
+
+        </p>
+
+        <a href="#" class="btn">
+
+            View Details
+
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</section>
+</div>
+{% endblock %}

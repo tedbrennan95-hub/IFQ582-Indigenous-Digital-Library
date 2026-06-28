@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Home | Indigenous Digital Library
+{% endblock %}
+
+{% block content %}
+
+    <!-- =====================================================
+         Homepage Banner Image
+         -----------------------------------------------------
+         A wide visual banner creates immediate impact.
+    ====================================================== -->
+
+    <section class="hero-banner">
+
+        <img
+            src="{{ url_for('static', filename='images/uluru.jpg') }}"
+            alt="Uluru landscape"
+        >
+
+    </section>
+
+
+    <!-- =====================================================
+         Homepage Introduction
+    ====================================================== -->
+
+    <section class="hero">
+
+        <h2>Indigenous Digital Library</h2>
+
+        <p class="hero-lead">
+            Preserving, protecting and respectfully sharing Indigenous
+            cultural knowledge through community-led digital access.
+        </p>
+
+        <a class="button" href="#">
+            Explore Collections
+        </a>
+
+    </section>
+
+
+    <!-- =====================================================
+         Acknowledgement of Country
+    ====================================================== -->
+
+    <section class="acknowledgement-card">
+
+        <h2>Acknowledgement of Country</h2>
+
+        <p>
+            We acknowledge the Traditional Owners of the lands on which this
+            digital library is accessed and operated.
+        </p>
+
+        <p>
+            We pay our respects to Elders past and present, and recognise their
+            continuing connection to Country, culture, language and community.
+        </p>
+
+        <p>
+            This application has been developed as part of an educational project
+            and demonstrates how technology can support respectful management of
+            Indigenous cultural collections through community-led access and review.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         Library Process Explanation
+    ====================================================== -->
+
+    <section class="section-heading">
+
+        <h2>How the Library Works</h2>
+
+        <p>
+            The library supports public discovery, culturally appropriate access
+            requests, and authorised community review.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         Feature Cards
+    ====================================================== -->
+
+    <section class="card-grid">
+
+        <article class="info-card">
+            <h3>Discover Collections</h3>
+            <p>
+                Browse digitised cultural collection items and view available
+                public metadata.
+            </p>
+        </article>
+
+        <article class="info-card">
+            <h3>Request Access</h3>
+            <p>
+                Submit access requests for restricted items requiring cultural or
+                community approval.
+            </p>
+        </article>
+
+        <article class="info-card">
+            <h3>Community Review</h3>
+            <p>
+                Authorised reviewers can assess access requests and record
+                culturally appropriate decisions.
+            </p>
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         Statistics Cards
+    ====================================================== -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <strong>Placeholder</strong>
+            <span>Collection Items</span>
+        </div>
+
+        <div class="stat-card">
+            <strong>Placeholder</strong>
+            <span>Restricted Items</span>
+        </div>
+
+        <div class="stat-card">
+            <strong>Placeholder</strong>
+            <span>Access Requests</span>
+        </div>
+
+        <div class="stat-card">
+            <strong>Placeholder</strong>
+            <span>Community Reviews</span>
+        </div>
+
+    </section>
+
+{% endblock %}
