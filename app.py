@@ -442,6 +442,217 @@ def my_requests():
         requests=requests
     )
 
+# ============================================================
+# ============================================================
+# ============================================================
+# ============================================================
+# Reviewer Dashboard
+# ============================================================
+
+@app.route("/reviewer-dashboard")
+def reviewer_dashboard():
+
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    if session.get("user_role") not in ["reviewer", "admin"]:
+        return "Access denied: reviewer access required.", 403
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Dashboard summary cards based on access request status
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM access_requests
+        WHERE request_status = 'Pending'
+    """)
+    pending_count = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM access_requests
+        WHERE request_status = 'Approved'
+    """)
+    approved_count = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM access_requests
+        WHERE request_status = 'Rejected'
+    """)
+    rejected_count = cursor.fetchone()["total"]
+
+    # Pending access requests awaiting reviewer decision
+    cursor.execute("""
+        SELECT
+            ar.request_id,
+            ar.item_id,
+            ar.user_id,
+            ar.reason,
+            ar.request_status,
+            ar.request_date,
+            ci.title,
+            ci.description
+        FROM access_requests ar
+        JOIN collection_items ci
+            ON ar.item_id = ci.item_id
+        WHERE ar.request_status = 'Pending'
+        ORDER BY ar.request_date DESC
+    """)
+
+    pending_items = cursor.fetchall()
+
+    # Recent reviewer activity / audit log preview
+# Recent reviewer activity / audit log preview
+    cursor.execute("""
+        SELECT
+            rd.decision_id,
+            rd.request_id,
+            rd.reviewer_id,
+            rd.decision,
+            rd.comments,
+            rd.decision_date,
+            ci.title,
+            ar.request_status,
+            u.full_name AS reviewer_name
+        FROM review_decisions rd
+
+        JOIN access_requests ar
+            ON rd.request_id = ar.request_id
+
+        JOIN collection_items ci
+            ON ar.item_id = ci.item_id
+
+        JOIN authorised_reviewers auth
+            ON rd.reviewer_id = auth.reviewer_id
+
+        JOIN users u
+            ON auth.user_id = u.user_id
+
+        ORDER BY rd.decision_date DESC
+
+        LIMIT 5
+    """)
+
+    recent_activity = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "reviewer_dashboard.html",
+        pending_count=pending_count,
+        approved_count=approved_count,
+        rejected_count=rejected_count,
+        pending_items=pending_items,
+        recent_activity=recent_activity
+    )
+
+# ============================================================
+# ============================================================
+# ============================================================
+# ============================================================
+# Review Access Request Page + Decision Submission
+# ============================================================
+
+@app.route("/review-request/<int:request_id>", methods=["GET", "POST"])
+def review_item(request_id):
+
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    if session.get("user_role") not in ["reviewer", "admin"]:
+        return "Access denied: reviewer access required.", 403
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    if request.method == "POST":
+
+        decision = request.form.get("decision")
+        comments = request.form.get("comments")
+
+        if decision not in ["Approved", "Rejected"]:
+            cursor.close()
+            conn.close()
+            return "Invalid review decision.", 400
+
+        # Find authorised reviewer record for logged-in user
+        cursor.execute("""
+            SELECT reviewer_id
+            FROM authorised_reviewers
+            WHERE user_id = %s
+        """, (session.get("user_id"),))
+
+        reviewer = cursor.fetchone()
+
+        if not reviewer:
+            cursor.close()
+            conn.close()
+            return "Reviewer profile not found for this logged-in user.", 403
+
+        reviewer_id = reviewer["reviewer_id"]
+
+        # 1. Update the access request status
+        cursor.execute("""
+            UPDATE access_requests
+            SET request_status = %s
+            WHERE request_id = %s
+        """, (decision, request_id))
+
+        # 2. Insert reviewer decision audit record
+        cursor.execute("""
+            INSERT INTO review_decisions
+                (request_id, reviewer_id, decision, comments)
+            VALUES
+                (%s, %s, %s, %s)
+        """, (
+            request_id,
+            reviewer_id,
+            decision,
+            comments
+        ))
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        flash(f"Access request has been {decision.lower()} successfully.", "success")
+        return redirect(url_for("reviewer_dashboard"))
+
+    # Load access request details
+    cursor.execute("""
+        SELECT
+            ar.request_id,
+            ar.item_id,
+            ar.user_id,
+            ar.reason,
+            ar.request_status,
+            ar.request_date,
+            ci.title,
+            ci.description,
+            ci.status AS item_status
+        FROM access_requests ar
+        JOIN collection_items ci
+            ON ar.item_id = ci.item_id
+        WHERE ar.request_id = %s
+    """, (request_id,))
+
+    item = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if not item:
+        return "Access request not found.", 404
+
+    return render_template("review_item.html", item=item)
+
+
+# ==========================================================
+# ==========================================================
 # ==========================================================
 # ==========================================================
 # Main Program

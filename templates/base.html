@@ -90,6 +90,10 @@
                     {% endif %}
                 {% endif %}
 
+                {% if session.get("user_role") in ["reviewer", "admin"] %}
+                    <a href="{{ url_for('reviewer_dashboard') }}">Reviewer Dashboard</a>
+                {% endif %}
+
             </div>
 
             <div class="nav-right">

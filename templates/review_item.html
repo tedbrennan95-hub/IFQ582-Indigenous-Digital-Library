@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Review Item{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="page-header">
+        <h1>Review Collection Item</h1>
+        <p>Assess item metadata and apply a reviewer decision.</p>
+    </div>
+
+    <div class="content-card">
+
+        <div class="content-card-header">
+            <h2>{{ item.title }}</h2>
+            <p>Current status: {{ item.status }}</p>
+        </div>
+
+        <div class="review-list">
+
+            <div class="review-description-block">
+                <span class="meta-label">Description</span>
+                <p class="review-description">{{ item.description }}</p>
+            </div>
+
+            <div class="review-meta">
+
+                <div>
+                    <span class="meta-label">Item ID</span>
+                    <strong>{{ item.item_id }}</strong>
+                </div>
+
+                <div>
+                    <span class="meta-label">Created</span>
+                    <strong>
+                        {{ item.created_date.strftime('%d %b %Y') if item.created_date else 'Not recorded' }}
+                    </strong>
+                </div>
+
+                <div>
+                    <span class="meta-label">Current Visibility</span>
+                    <strong>{{ item.status }}</strong>
+                </div>
+
+            </div>
+
+            <form method="POST" action="{{ url_for('review_item', request_id=item.request_id) }}">
+                <div class="form-group">
+
+                    <label for="comments" class="form-label">
+                        Reviewer Comments
+                    </label>
+
+                    <textarea
+                        id="comments"
+                        name="comments"
+                        class="review-textarea"
+                        rows="7"
+                        placeholder="Record your review comments, cultural considerations, approval rationale or requested changes..."
+                        required></textarea>
+
+                </div>
+
+                <div class="review-buttons">
+
+                    <button
+                        type="submit"
+                        name="decision"
+                        value="Approved"
+                        class="btn-approve">
+
+                        ✓ Approve Item
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="decision"
+                        value="Rejected"
+                        class="btn-reject">
+
+                        ✕ Reject Item
+
+                    </button>
+
+                    <a
+                        href="{{ url_for('reviewer_dashboard') }}"
+                        class="btn-return">
+
+                        ← Return to Dashboard
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

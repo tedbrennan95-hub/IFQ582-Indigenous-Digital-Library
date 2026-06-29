@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Reviewer Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="page-header reviewer-header">
+        <h1>Reviewer Dashboard</h1>
+        <p>
+            Welcome, <strong>{{ session.get("user_name") }}</strong>.
+            Review collection items awaiting cultural and metadata approval.
+        </p>
+    </div>
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card warning">
+            <div class="dashboard-icon">⏳</div>
+            <h3>Pending Reviews</h3>
+            <p>{{ pending_count }}</p>
+        </div>
+
+        <div class="dashboard-card success">
+            <div class="dashboard-icon">✓</div>
+            <h3>Approved Items</h3>
+            <p>{{ approved_count }}</p>
+        </div>
+
+        <div class="dashboard-card danger">
+            <div class="dashboard-icon">✕</div>
+            <h3>Rejected Items</h3>
+            <p>{{ rejected_count }}</p>
+        </div>
+
+    </div>
+
+    <div class="content-card">
+
+        <div class="content-card-header">
+            <h2>Items Awaiting Review</h2>
+            <p>
+                These items require reviewer assessment before their access status is finalised.
+            </p>
+        </div>
+
+        {% if pending_items %}
+
+            <div class="review-list">
+
+                {% for item in pending_items %}
+
+                    <div class="review-item-card">
+
+                        <div class="review-item-main">
+
+                            <div>
+                                <span class="review-item-label">Collection Item</span>
+                                <h3>{{ item.title }}</h3>
+                            </div>
+
+                            <span class="status-badge status-pending">
+                                {{ item.request_status }}
+                            </span>
+
+                        </div>
+
+                        <div class="review-description-block">
+                            <span class="meta-label">Description</span>
+                            <p class="review-description">
+                                {{ item.description }}
+                            </p>
+                        </div>
+
+                        <div class="review-meta">
+
+                            <div>
+                                <span class="meta-label">Item ID</span>
+                                <strong>{{ item.item_id }}</strong>
+                            </div>
+
+                            <div>
+                                <span class="meta-label">Created</span>
+                                <strong>
+                                    {{ item.request_date.strftime('%d %b %Y') if item.request_date else 'Not recorded' }}
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span class="meta-label">Current Visibility</span>
+                                <strong>{{ item.status }}</strong>
+                            </div>
+
+                        </div>
+
+                        <div class="review-actions">
+
+                            <a
+                                href="{{ url_for('review_item', request_id=item.request_id) }}"
+                                class="btn-primary">
+
+                                Review Item
+                                <span style="margin-left:8px;">→</span>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+                <h3>No pending reviews</h3>
+                <p>There are currently no collection items awaiting reviewer action.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<div class="content-card recent-activity-card">
+
+    <div class="content-card-header">
+        <h2>Recent Reviewer Activity</h2>
+        <p>Latest access request decisions recorded in the audit log.</p>
+    </div>
+
+    {% if recent_activity %}
+
+        <div class="activity-list">
+
+            {% for activity in recent_activity %}
+
+                <div class="activity-item">
+
+                    <div class="activity-icon
+                        {% if activity.decision == 'Approved' %}
+                            activity-approved
+                        {% else %}
+                            activity-rejected
+                        {% endif %}
+                    ">
+                        {% if activity.decision == 'Approved' %}
+                            ✓
+                        {% else %}
+                            ✕
+                        {% endif %}
+                    </div>
+
+                    <div class="activity-details">
+
+                        <h3>{{ activity.title }}</h3>
+
+                        <p>
+                            <strong>{{ activity.decision }}</strong>
+                        </p>
+
+                        <span class="
+                            decision-badge
+                            {% if activity.decision == 'Approved' %}
+                                badge-approved
+                            {% else %}
+                                badge-rejected
+                            {% endif %}
+                        ">
+
+                            {{ activity.decision }}
+
+                        </span>
+
+                        <p class="activity-request">
+                            Access Request #{{ activity.request_id }}
+                        </p>
+
+                        <p class="activity-comments">
+                            {{ activity.comments }}
+                        </p>
+
+                        <span class="activity-date">
+                            {{ activity.decision_date.strftime('%d %b %Y %I:%M %p') if activity.decision_date else 'Date not recorded' }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <h3>No reviewer activity yet</h3>
+            <p>Reviewer decisions will appear here once access requests are approved or rejected.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
