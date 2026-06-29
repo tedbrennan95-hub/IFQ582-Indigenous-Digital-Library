@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <h1>Administrator Dashboard</h1>
+
+    <p class="intro-text">
+        Welcome, {{ session.get("user_name") }}. This dashboard provides an overview of system activity,
+        collection status, access requests, and review activity.
+    </p>
+
+    <h2>System Overview</h2>
+
+    <div class="system-overview-grid">
+
+        <div class="system-card">
+            <h3>Current Administrator</h3>
+            <p>{{ session.get("user_name") }}</p>
+        </div>
+
+        <div class="system-card">
+            <h3>User Role</h3>
+            <p>{{ session.get("user_role") }}</p>
+        </div>
+
+        <div class="system-card connected">
+
+            <h3>Database Status</h3>
+
+            <p class="status-connected">
+                Connected
+            </p>
+
+        </div>
+
+        <div class="system-card">
+            <h3>System Area</h3>
+            <p>Administration</p>
+        </div>
+
+    </div>
+
+    <h2>System Health</h2>
+
+    <div class="system-health-panel">
+
+        <div class="health-row">
+            <span>🟢 Database Connection</span>
+            <strong>Operational</strong>
+        </div>
+
+        <div class="health-row">
+            <span>🟢 User Authentication</span>
+            <strong>Active</strong>
+        </div>
+
+        <div class="health-row">
+            <span>🟢 Role Based Access</span>
+            <strong>Enabled</strong>
+        </div>
+
+        <div class="health-row">
+            <span>🟢 Access Request Workflow</span>
+            <strong>Operational</strong>
+        </div>
+
+        <div class="health-row">
+            <span>🟢 Review Decision Workflow</span>
+            <strong>Operational</strong>
+        </div>
+
+    </div>
+
+
+
+    <h2>System Summary</h2>
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+        <h3>👥 Registered Users</h3>
+        <p class="dashboard-number">{{ total_users }}</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>📚 Collection Items</h3>
+        <p class="dashboard-number">{{ total_items }}</p>
+    </div>
+
+    <div class="dashboard-card {% if pending_reviews > 0 %}warning{% else %}approved{% endif %}">
+        <h3>🔐 Pending Requests</h3>
+        <p class="dashboard-number">{{ pending_requests }}</p>
+    </div>
+
+    <div class="dashboard-card {% if pending_reviews > 0 %}warning{% else %}approved{% endif %}">
+        <h3>📝 Pending Reviews</h3>
+        <p class="dashboard-number">{{ pending_reviews }}</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>📋 Total Reviews</h3>
+        <p class="dashboard-number">{{ total_reviews }}</p>
+    </div>
+
+    <div class="dashboard-card restricted">
+        <h3>🔒 Restricted Items</h3>
+        <p class="dashboard-number">{{ restricted_items }}</p>
+    </div>
+
+    <div class="dashboard-card approved">
+        <h3>✅ Approved Items</h3>
+        <p class="dashboard-number">{{ approved_items }}</p>
+    </div>
+
+</div>
+
+    <h2>Quick Actions</h2>
+
+    <div class="quick-actions">
+
+        <a class="button-link" href="{{ url_for('home') }}">
+            🏠 Home
+        </a>
+
+        <a class="button-link" href="{{ url_for('collections') }}">
+            📚 View Collection
+        </a>
+
+        <a class="button-link" href="{{ url_for('reviewer_dashboard') }}">
+            📝 Reviewer Dashboard
+        </a>
+
+        <a class="button-link" href="{{ url_for('logout') }}">
+            🚪 Logout
+        </a>
+
+    </div>
+
+    <h2>Recent System Activity</h2>
+
+    {% if recent_requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Requester</th>
+                    <th>Collection Item</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for request in recent_requests %}
+                <tr>
+                    <td>{{ request.request_id }}</td>
+                    <td>{{ request.requester_name }}</td>
+                    <td>{{ request.item_title }}</td>
+                    <td>{{ request.request_status }}</td>
+                    <td>{{ request.request_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No access requests have been submitted yet.</p>
+    {% endif %}
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+
+<section class="page-section error-page">
+    <h1>500 - Internal Server Error</h1>
+
+    <p>
+        An unexpected error occurred while processing your request.
+    </p>
+
+    <p>
+        Please try again later or contact the system administrator if the problem persists.
+    </p>
+
+    <a class="button-link" href="{{ url_for('home') }}">
+        Return Home
+    </a>
+</section>
+
+{% endblock %}

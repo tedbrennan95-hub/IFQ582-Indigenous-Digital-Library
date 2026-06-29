@@ -10,7 +10,7 @@
         <h1>Reviewer Dashboard</h1>
         <p>
             Welcome, <strong>{{ session.get("user_name") }}</strong>.
-            Review collection items awaiting cultural and metadata approval.
+            Review access requests for culturally sensitive collection items.
         </p>
     </div>
 
@@ -24,13 +24,13 @@
 
         <div class="dashboard-card success">
             <div class="dashboard-icon">✓</div>
-            <h3>Approved Items</h3>
+            <h3>Approved Requests</h3>
             <p>{{ approved_count }}</p>
         </div>
 
         <div class="dashboard-card danger">
             <div class="dashboard-icon">✕</div>
-            <h3>Rejected Items</h3>
+            <h3>Rejected Requests</h3>
             <p>{{ rejected_count }}</p>
         </div>
 
@@ -39,9 +39,9 @@
     <div class="content-card">
 
         <div class="content-card-header">
-            <h2>Items Awaiting Review</h2>
+            <h2>Access Requests Awaiting Review</h2>
             <p>
-                These items require reviewer assessment before their access status is finalised.
+                These requests require reviewer assessment before access is approved or rejected.
             </p>
         </div>
 
@@ -56,8 +56,21 @@
                         <div class="review-item-main">
 
                             <div>
-                                <span class="review-item-label">Collection Item</span>
+                                <span class="review-item-label">
+                                    Access Request #{{ item.request_id }}
+                                </span>
+
                                 <h3>{{ item.title }}</h3>
+
+                                <p style="margin-top:8px;">
+                                    <strong>Requested by:</strong>
+                                    {{ item.requester_name }}
+                                    {% if item.requester_email %}
+                                        <span style="color:#777;">
+                                            ({{ item.requester_email }})
+                                        </span>
+                                    {% endif %}
+                                </p>
                             </div>
 
                             <span class="status-badge status-pending">
@@ -67,7 +80,14 @@
                         </div>
 
                         <div class="review-description-block">
-                            <span class="meta-label">Description</span>
+                            <span class="meta-label">Request Reason</span>
+                            <p class="review-description">
+                                {{ item.reason }}
+                            </p>
+                        </div>
+
+                        <div class="review-description-block">
+                            <span class="meta-label">Collection Item Description</span>
                             <p class="review-description">
                                 {{ item.description }}
                             </p>
@@ -76,20 +96,25 @@
                         <div class="review-meta">
 
                             <div>
+                                <span class="meta-label">Request ID</span>
+                                <strong>{{ item.request_id }}</strong>
+                            </div>
+
+                            <div>
                                 <span class="meta-label">Item ID</span>
                                 <strong>{{ item.item_id }}</strong>
                             </div>
 
                             <div>
-                                <span class="meta-label">Created</span>
-                                <strong>
-                                    {{ item.request_date.strftime('%d %b %Y') if item.request_date else 'Not recorded' }}
-                                </strong>
+                                <span class="meta-label">User ID</span>
+                                <strong>{{ item.user_id }}</strong>
                             </div>
 
                             <div>
-                                <span class="meta-label">Current Visibility</span>
-                                <strong>{{ item.status }}</strong>
+                                <span class="meta-label">Requested</span>
+                                <strong>
+                                    {{ item.request_date.strftime('%d %b %Y') if item.request_date else 'Not recorded' }}
+                                </strong>
                             </div>
 
                         </div>
@@ -100,7 +125,7 @@
                                 href="{{ url_for('review_item', request_id=item.request_id) }}"
                                 class="btn-primary">
 
-                                Review Item
+                                Review Request
                                 <span style="margin-left:8px;">→</span>
 
                             </a>
@@ -117,7 +142,7 @@
 
             <div class="empty-state">
                 <h3>No pending reviews</h3>
-                <p>There are currently no collection items awaiting reviewer action.</p>
+                <p>There are currently no access requests awaiting reviewer action.</p>
             </div>
 
         {% endif %}

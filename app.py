@@ -28,6 +28,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from functools import wraps
 from datetime import datetime
 import mysql.connector
+from flask import abort
 
 # Import database functions from the Model layer
 from models.database import get_database_connection
@@ -193,6 +194,14 @@ def login():
 
         email = request.form.get("email")
         password = request.form.get("password")
+
+        if not email:
+            flash("Please enter your email address.")
+            return redirect(url_for("login"))
+
+        if not password:
+            flash("Please enter your password.")
+            return redirect(url_for("login"))
 
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
@@ -367,7 +376,7 @@ def collection_detail(item_id):
     item = get_collection_item_by_id(item_id)
 
     if item is None:
-        return "<h2>Collection item not found.</h2>", 404
+        abort(404)
 
     return render_template("collection_detail.html", item=item)
 
@@ -390,7 +399,7 @@ def request_access(item_id):
     item = get_collection_item_by_id(item_id)
 
     if item is None:
-        return "<h2>Collection item not found.</h2>", 404
+        abort(404)
 
     existing_request = check_existing_access_request(
         session["user_id"],
@@ -400,6 +409,10 @@ def request_access(item_id):
     if request.method == "POST":
 
         reason = request.form.get("reason")
+
+        if not reason or reason.strip() == "":
+            flash("Please provide a reason for your access request.")
+            return redirect(url_for("request_access", item_id=item_id))
 
         if existing_request:
             flash("You already have an active access request for this item.")
@@ -456,7 +469,7 @@ def reviewer_dashboard():
         return redirect(url_for("login"))
 
     if session.get("user_role") not in ["reviewer", "admin"]:
-        return "Access denied: reviewer access required.", 403
+        abort(403)
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -493,14 +506,17 @@ def reviewer_dashboard():
             ar.request_status,
             ar.request_date,
             ci.title,
-            ci.description
+            ci.description,
+            u.full_name AS requester_name,
+            u.email AS requester_email
         FROM access_requests ar
         JOIN collection_items ci
             ON ar.item_id = ci.item_id
+        JOIN users u
+            ON ar.user_id = u.user_id
         WHERE ar.request_status = 'Pending'
         ORDER BY ar.request_date DESC
     """)
-
     pending_items = cursor.fetchall()
 
     # Recent reviewer activity / audit log preview
@@ -563,7 +579,7 @@ def review_item(request_id):
         return redirect(url_for("login"))
 
     if session.get("user_role") not in ["reviewer", "admin"]:
-        return "Access denied: reviewer access required.", 403
+        abort(403)
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -576,7 +592,8 @@ def review_item(request_id):
         if decision not in ["Approved", "Rejected"]:
             cursor.close()
             conn.close()
-            return "Invalid review decision.", 400
+            flash("Please select a valid review decision.")
+            return redirect(url_for("review_item", request_id=request_id))
 
         # Find authorised reviewer record for logged-in user
         cursor.execute("""
@@ -590,7 +607,7 @@ def review_item(request_id):
         if not reviewer:
             cursor.close()
             conn.close()
-            return "Reviewer profile not found for this logged-in user.", 403
+            abort(403)
 
         reviewer_id = reviewer["reviewer_id"]
 
@@ -646,7 +663,7 @@ def review_item(request_id):
     conn.close()
 
     if not item:
-        return "Access request not found.", 404
+        abort(404)
 
     return render_template("review_item.html", item=item)
 
@@ -655,9 +672,119 @@ def review_item(request_id):
 # ==========================================================
 # ==========================================================
 # ==========================================================
+# ============================================================
+# Admin Dashboard
+# ============================================================
+
+@app.route("/admin-dashboard")
+def admin_dashboard():
+
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    if session.get("user_role") not in ["admin", "Administrator"]:
+        abort(403)
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT COUNT(*) AS total FROM users")
+    total_users = cursor.fetchone()["total"]
+
+    cursor.execute("SELECT COUNT(*) AS total FROM collection_items")
+    total_items = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM access_requests
+        WHERE request_status = 'Pending'
+    """)
+    pending_requests = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM review_decisions
+    """)
+    total_reviews = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM access_requests
+        WHERE request_status = 'Pending Review'
+    """)
+    pending_reviews = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM collection_items
+        WHERE status = 'Restricted'
+    """)
+    restricted_items = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM collection_items
+        WHERE status = 'Approved'
+    """)
+    approved_items = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT 
+            ar.request_id,
+            ar.request_status,
+            ar.request_date,
+            u.full_name AS requester_name,
+            ci.title AS item_title
+        FROM access_requests ar
+        LEFT JOIN users u ON ar.user_id = u.user_id
+        LEFT JOIN collection_items ci ON ar.item_id = ci.item_id
+        ORDER BY ar.request_date DESC
+        LIMIT 5
+    """)
+    recent_requests = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "admin_dashboard.html",
+        total_users=total_users,
+        total_items=total_items,
+        pending_requests=pending_requests,
+        total_reviews=total_reviews,
+        restricted_items=restricted_items,
+        approved_items=approved_items,
+        recent_requests=recent_requests,
+        pending_reviews=pending_reviews
+    )
+
+# ==========================================================
+# ==========================================================
+# ==========================================================
+# ============================================================
+# Error Handling
+# ============================================================
+
+@app.errorhandler(403)
+def forbidden_error(error):
+    return render_template("403.html"), 403
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html"), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template("500.html"), 500
+
+# ==========================================================
 # Main Program
 # ==========================================================
 
 if __name__ == "__main__":
 
     app.run(debug=True)
+
+    
