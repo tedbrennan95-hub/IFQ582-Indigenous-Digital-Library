@@ -36,139 +36,134 @@
 
     <section class="detail-card">
 
-        <!-- ==================================================
-             Back Button
-        =================================================== -->
         <a href="{{ url_for('collections') }}" class="back-link">
             ← Back to Browse Collection
         </a>
 
-        <!-- ==================================================
-             Collection Title
-        =================================================== -->
-        <h1>
-            {{ item.title }}
-        </h1>
+        <h1>{{ item.title }}</h1>
 
-        <!-- ==================================================
-             Collection Metadata
-        =================================================== -->
+        {% if item.item_id == 1 %}
+            <img src="{{ url_for('static', filename='images/collections/basket.png') }}"
+                 alt="Woven Basket Collection"
+                 class="collection-image">
+
+        {% elif item.item_id == 2 %}
+            <img src="{{ url_for('static', filename='images/collections/oral_history.png') }}"
+                 alt="Oral History Interview"
+                 class="collection-image">
+
+        {% elif item.item_id == 3 %}
+            <img src="{{ url_for('static', filename='images/collections/ceremonial.png') }}"
+                 alt="Ceremonial Object Record"
+                 class="collection-image">
+
+        {% elif item.item_id == 4 %}
+            <img src="{{ url_for('static', filename='images/collections/language.png') }}"
+                 alt="Language Word List"
+                 class="collection-image">
+
+        {% elif item.item_id == 5 %}
+            <img src="{{ url_for('static', filename='images/collections/mission_photo.png') }}"
+                 alt="Historical Mission Photograph"
+                 class="collection-image">
+
+        {% elif item.item_id == 6 %}
+            <img src="{{ url_for('static', filename='images/collections/songline_map.png') }}"
+                 alt="Restricted Songline Map"
+                 class="collection-image">
+        {% endif %}
+
+        <p class="image-caption">
+            Demonstration image representing this collection item.
+        </p>
+
+        <hr class="detail-divider">
 
         <div class="detail-meta">
 
             <p>
-
                 <strong>Status:</strong>
 
                 {% if item.status == "Public" %}
-
-                    <span class="status-badge status-public">
-                        {{ item.status }}
-                    </span>
+                    <span class="status-badge status-public">{{ item.status }}</span>
 
                 {% elif item.status == "Restricted" %}
-
-                    <span class="status-badge status-restricted">
-                        {{ item.status }}
-                    </span>
+                    <span class="status-badge status-restricted">{{ item.status }}</span>
 
                 {% elif item.status == "Pending Review" %}
+                    <span class="status-badge status-pending">{{ item.status }}</span>
 
-                    <span class="status-badge status-pending">
-                        {{ item.status }}
-                    </span>
+                {% elif item.status == "Approved" %}
+                    <span class="status-badge status-public">{{ item.status }}</span>
 
                 {% else %}
-
-                    <span class="status-badge">
-                        {{ item.status }}
-                    </span>
-
+                    <span class="status-badge">{{ item.status }}</span>
                 {% endif %}
-
             </p>
 
             <p>
-
                 <strong>Added:</strong>
-
                 {{ item.created_date }}
-
             </p>
 
         </div>
 
-        <!-- ==================================================
-             Divider
-        =================================================== -->
-
         <hr class="detail-divider">
-
-        <!-- ==================================================
-             Description
-        =================================================== -->
 
         <h2>Description</h2>
 
         <p class="detail-description">
-
             {{ item.description }}
-
         </p>
 
-        <!-- ==================================================
-             Restricted Access Notice
+        <hr class="detail-divider">
 
-             Only displayed when the item has a
-             "Restricted" status.
+        <h2>Collection Information</h2>
 
-             Public items do not require an access request.
-        =================================================== -->
-
-        {% if item.status == "Restricted" %}
-
-        <div class="restricted-notice">
-
-            <h3>Restricted Access</h3>
-
-            <p>
-
-                This collection item may contain culturally
-                sensitive knowledge or materials.
-
-                Access requires review and approval by an
-                authorised community reviewer before the
-                content can be viewed.
-
-            </p>
-
-            <a
-                href="{{ url_for('request_access', item_id=item.item_id) }}"
-                class="btn">
-
-                Request Access
-
-            </a>
-
+        <div class="detail-info-grid">
+            <p><strong>Collection ID:</strong> {{ item.item_id }}</p>
+            <p><strong>Title:</strong> {{ item.title }}</p>
+            <p><strong>Status:</strong> {{ item.status }}</p>
+            <p><strong>Date Added:</strong> {{ item.created_date }}</p>
         </div>
 
+        {% if item.status == "Public" %}
+
+            <div class="public-notice">
+                <h3>Public Access</h3>
+                <p>
+                    This item is publicly available and does not require an access request.
+                </p>
+            </div>
+
+        {% elif item.status == "Approved" %}
+
+            <div class="approved-notice">
+                <h3>✔ Approved Item</h3>
+                <p>
+                    This item has completed community review and is available to authorised users.
+                </p>
+            </div>
+
+        {% elif item.status == "Restricted" %}
+
+            <div class="restricted-notice">
+
+                <h3>Restricted Access</h3>
+
+                <p>
+                    This collection item may contain culturally sensitive knowledge or materials.
+                    Access requires review and approval by an authorised community reviewer before
+                    the content can be viewed.
+                </p>
+
+                <a href="{{ url_for('request_access', item_id=item.item_id) }}" class="btn">
+                    Request Access
+                </a>
+
+            </div>
+
         {% endif %}
-
-        <!-- ==================================================
-             Future Enhancements
-
-             Additional metadata can be displayed here in
-             later milestones, including:
-
-             • Community
-             • Collection Type
-             • Cultural Protocol
-             • Contributor
-             • Collection Image
-             • Traditional Owner
-             • Access History
-
-        =================================================== -->
 
     </section>
 

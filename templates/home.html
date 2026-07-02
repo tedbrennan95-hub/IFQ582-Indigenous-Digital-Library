@@ -6,6 +6,32 @@
 
 {% block content %}
 
+<!-- ==========================================================
+     Home Page
+
+     PURPOSE
+     -------
+     Displays the Indigenous Digital Library homepage.
+
+     This page introduces the purpose of the application,
+     highlights Indigenous cultural preservation, and
+     provides navigation into the collection catalogue.
+
+     Users may browse collections, log in, or access
+     features based on their assigned role.
+
+     MVC Flow
+
+     Browser
+          │
+          ▼
+     Flask Route
+          │
+          ▼
+     home.html
+
+========================================================== -->
+
     <!-- =====================================================
          Homepage Banner Image
          -----------------------------------------------------
@@ -35,7 +61,7 @@
             cultural knowledge through community-led digital access.
         </p>
 
-        <a class="button" href="#">
+        <a href="{{ url_for('collections') }}" class="button-link">
             Explore Collections
         </a>
 
@@ -118,32 +144,5 @@
     </section>
 
 
-    <!-- =====================================================
-         Statistics Cards
-    ====================================================== -->
-
-    <section class="stats-grid">
-
-        <div class="stat-card">
-            <strong>Placeholder</strong>
-            <span>Collection Items</span>
-        </div>
-
-        <div class="stat-card">
-            <strong>Placeholder</strong>
-            <span>Restricted Items</span>
-        </div>
-
-        <div class="stat-card">
-            <strong>Placeholder</strong>
-            <span>Access Requests</span>
-        </div>
-
-        <div class="stat-card">
-            <strong>Placeholder</strong>
-            <span>Community Reviews</span>
-        </div>
-
-    </section>
 
 {% endblock %}

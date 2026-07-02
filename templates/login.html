@@ -4,6 +4,36 @@
 
 {% block content %}
 
+<!-- ==========================================================
+     Login Page
+
+     PURPOSE
+     -------
+     Authenticates registered users before granting access
+     to protected areas of the Indigenous Digital Library.
+
+     Users enter their email address and password.
+     Successful authentication creates a Flask session
+     containing the user's identity and assigned role.
+
+     MVC Flow
+
+     Browser
+          │
+          ▼
+     Flask Route
+          │
+          ▼
+     database.py
+          │
+          ▼
+     MySQL Database
+          │
+          ▼
+     login.html
+
+========================================================== -->
+
 <section class="page-section">
 
     <h1>Login</h1>
@@ -41,11 +71,7 @@
     <form method="POST" class="form-card">
 
         <div class="form-group">
-
-            <label for="email">
-                Email Address
-            </label>
-
+            <label for="email">Email Address</label>
             <input
                 type="email"
                 id="email"
@@ -53,22 +79,16 @@
                 placeholder="Enter your email address"
                 required
                 autofocus>
-
         </div>
 
         <div class="form-group">
-
-            <label for="password">
-                Password
-            </label>
-
+            <label for="password">Password</label>
             <input
                 type="password"
                 id="password"
                 name="password"
                 placeholder="Enter your password"
                 required>
-
         </div>
 
         <button type="submit" class="button-link">

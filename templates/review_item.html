@@ -1,3 +1,34 @@
+<!-- ==========================================================
+     Review Access Request
+
+     PURPOSE
+     -------
+     Displays a submitted access request for review.
+
+     Authorised reviewers may examine the request,
+     record comments and approve or reject access.
+
+     Review decisions are stored within the MySQL
+     database and update the request status.
+
+     MVC Flow
+
+     Browser
+          │
+          ▼
+     Flask Route
+          │
+          ▼
+     database.py
+          │
+          ▼
+     MySQL Database
+          │
+          ▼
+     review_request.html
+
+========================================================== -->
+
 {% extends "base.html" %}
 
 {% block title %}Review Item{% endblock %}

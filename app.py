@@ -86,9 +86,6 @@ def login_required(f):
     return decorated_function
 
 # ============================================================
-# ============================================================
-# ============================================================
-# ============================================================
 # MYSQL LOGIN, LOGOUT AND SESSION MANAGEMENT
 # ============================================================
 
@@ -296,9 +293,6 @@ def get_user_access_requests(user_id):
     return requests
 
 # ==========================================================
-# ==========================================================
-# ==========================================================
-# ============================================================
 # HOME PAGE Route
 # ============================================================
 
@@ -309,26 +303,31 @@ def home():
 
 # ==========================================================
 # ==========================================================
-# ==========================================================
-# ==========================================================
-# ----------------------------------------------------------
-# Browse Collection Route
-# ----------------------------------------------------------
+# Browse Collections Route
 #
-# This route displays collection items.
-#
-# If the user enters a search term, Flask sends that term
-# to the Model layer and retrieves matching records.
-#
-# If no search term is entered, all collection items are
-# displayed.
-#
-# Example:
-#
+# URL
+# ---
 # /collections
-# /collections?search=basket
 #
-# ----------------------------------------------------------
+# ACCESS
+# ------
+# Logged-in users
+#
+# PURPOSE
+# -------
+# Displays all collection items in the Indigenous Digital
+# Library.
+#
+# If a search term is entered, Flask passes that term to the
+# Model layer and retrieves matching records. If no search
+# term is entered, all collection items are displayed.
+#
+# Demonstrates:
+# • Protected routes
+# • Search query strings
+# • MySQL data retrieval
+# • Jinja loops in the HTML template
+# ==========================================================
 
 @app.route("/collections")
 @login_required
@@ -352,22 +351,30 @@ def collections():
 
 # ==========================================================
 # ==========================================================
-# ==========================================================
-# ==========================================================
-# ----------------------------------------------------------
 # Collection Item Details Route
-# ----------------------------------------------------------
 #
-# This route displays one collection item based on its
-# item_id from the database.
+# URL
+# ---
+# /collection/<item_id>
 #
-# Example:
+# ACCESS
+# ------
+# Logged-in users
 #
-# /collection/1
-# /collection/2
-# /collection/3
+# PURPOSE
+# -------
+# Displays one selected collection item using its item_id
+# primary key.
 #
-# ----------------------------------------------------------
+# The item_id is passed through the URL and used to retrieve
+# the matching record from the MySQL database.
+#
+# Demonstrates:
+# • Dynamic Flask routing
+# • Primary key lookup
+# • MySQL SELECT query through the Model layer
+# • Error handling with abort(404)
+# ==========================================================
 
 @app.route("/collection/<int:item_id>")
 @login_required
@@ -382,10 +389,32 @@ def collection_detail(item_id):
 
 
 # ============================================================
-# ============================================================
-# ============================================================
-# ============================================================
-# REQUEST ACCESS ROUTE
+# Request Access Route
+#
+# URL
+# ---
+# /request-access/<item_id>
+#
+# METHODS
+# -------
+# GET  = display the access request form
+# POST = save the access request to MySQL
+#
+# ACCESS
+# ------
+# Logged-in users
+#
+# PURPOSE
+# -------
+# Allows a user to request access to a restricted collection
+# item and stores the request as Pending for reviewer action.
+#
+# Demonstrates:
+# • Dynamic routing
+# • Form validation
+# • Duplicate request prevention
+# • INSERT query
+# • Restricted access workflow
 # ============================================================
 
 @app.route("/request-access/<int:item_id>", methods=["GET", "POST"])
@@ -435,10 +464,24 @@ def request_access(item_id):
 
 
 # ============================================================
-# ============================================================
-# ============================================================
-# ============================================================
-# MY REQUESTS ROUTE
+# My Requests Route
+#
+# URL
+# ---
+# /my-requests
+#
+# ACCESS
+# ------
+# Logged-in users
+#
+# PURPOSE
+# -------
+# Displays all access requests submitted by the current user.
+#
+# Demonstrates:
+# • Session-based user filtering
+# • JOIN query for readable item titles
+# • User-specific dashboard view
 # ============================================================
 
 @app.route("/my-requests")
@@ -456,10 +499,26 @@ def my_requests():
     )
 
 # ============================================================
-# ============================================================
-# ============================================================
-# ============================================================
-# Reviewer Dashboard
+# Reviewer Dashboard Route
+#
+# URL
+# ---
+# /reviewer-dashboard
+#
+# ACCESS
+# ------
+# Reviewers and administrators only
+#
+# PURPOSE
+# -------
+# Displays pending access requests and recent reviewer
+# decisions for cultural access review.
+#
+# Demonstrates:
+# • Role-based access control
+# • Aggregation queries using COUNT
+# • JOIN queries across multiple tables
+# • Reviewer workflow and audit trail
 # ============================================================
 
 @app.route("/reviewer-dashboard")
@@ -520,7 +579,6 @@ def reviewer_dashboard():
     pending_items = cursor.fetchall()
 
     # Recent reviewer activity / audit log preview
-# Recent reviewer activity / audit log preview
     cursor.execute("""
         SELECT
             rd.decision_id,
@@ -566,10 +624,32 @@ def reviewer_dashboard():
     )
 
 # ============================================================
-# ============================================================
-# ============================================================
-# ============================================================
-# Review Access Request Page + Decision Submission
+# Review Access Request Route
+#
+# URL
+# ---
+# /review-request/<request_id>
+#
+# METHODS
+# -------
+# GET  = display one request for review
+# POST = save the reviewer decision
+#
+# ACCESS
+# ------
+# Reviewers and administrators only
+#
+# PURPOSE
+# -------
+# Allows an authorised reviewer to approve or reject an
+# access request. The route updates the request status and
+# inserts a decision record into review_decisions.
+#
+# Demonstrates:
+# • Multi-table review workflow
+# • UPDATE query
+# • INSERT query
+# • Authorised reviewer validation
 # ============================================================
 
 @app.route("/review-request/<int:request_id>", methods=["GET", "POST"])
@@ -669,11 +749,27 @@ def review_item(request_id):
 
 
 # ==========================================================
-# ==========================================================
-# ==========================================================
-# ==========================================================
-# ============================================================
-# Admin Dashboard
+# Admin Dashboard Route
+#
+# URL
+# ---
+# /admin-dashboard
+#
+# ACCESS
+# ------
+# Administrators only
+#
+# PURPOSE
+# -------
+# Displays administrator-level system information including
+# users, collection items, access requests, review decisions,
+# restricted items and recent activity.
+#
+# Demonstrates:
+# • Administrator role checking
+# • SQL COUNT aggregation
+# • LEFT JOIN queries
+# • System overview dashboard
 # ============================================================
 
 @app.route("/admin-dashboard")
@@ -759,10 +855,16 @@ def admin_dashboard():
     )
 
 # ==========================================================
-# ==========================================================
-# ==========================================================
-# ============================================================
 # Error Handling
+#
+# PURPOSE
+# -------
+# Provides custom error pages instead of default browser or
+# Flask error messages.
+#
+# 403 = Forbidden access
+# 404 = Page not found
+# 500 = Internal server error
 # ============================================================
 
 @app.errorhandler(403)
@@ -781,6 +883,14 @@ def internal_server_error(error):
 
 # ==========================================================
 # Main Program
+#
+# PURPOSE
+# -------
+# Runs the Flask development server when this file is executed
+# directly.
+#
+# debug=True is useful during development because it reloads
+# the server after code changes and displays helpful errors.
 # ==========================================================
 
 if __name__ == "__main__":

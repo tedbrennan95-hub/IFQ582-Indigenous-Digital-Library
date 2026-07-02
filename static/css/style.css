@@ -1,6 +1,31 @@
 /* ==========================================================
    Indigenous Digital Library
    IFQ582 - Assignment 2
+
+   File: style.css
+
+   PURPOSE
+   -------
+   This stylesheet controls the visual layout of the Flask
+   web application.
+
+   The CSS is grouped by the HTML template or feature area it
+   supports. These comments help explain which page each group
+   of styles belongs to.
+
+   Main HTML Pages Styled
+   ----------------------
+   • base.html
+   • home.html
+   • login.html
+   • collections.html
+   • collection_detail.html
+   • request_access.html
+   • my_requests.html
+   • reviewer_dashboard.html
+   • review_item.html
+   • admin_dashboard.html
+   • 403.html / 404.html / 500.html
 ========================================================== */
 
 body {
@@ -17,7 +42,16 @@ body {
 }
 
 /* ==========================================================
-   Header
+   Site Header
+
+   HTML PAGE
+   ---------
+   base.html
+
+   PURPOSE
+   -------
+   Styles the shared page header displayed across the
+   application.
 ========================================================== */
 
 .site-header {
@@ -55,7 +89,16 @@ body {
 
 
 /* ==========================================================
-   Navigation
+   Navigation Bar
+
+   HTML PAGE
+   ---------
+   base.html
+
+   PURPOSE
+   -------
+   Styles the shared navigation menu. Navigation links change
+   depending on the logged-in user's session and role.
 ========================================================== */
 
 .site-nav {
@@ -114,6 +157,17 @@ nav a:hover {
 
 /* ==========================================================
    Responsive Design
+
+   HTML PAGES
+   ----------
+   base.html
+   home.html
+   collections.html
+
+   PURPOSE
+   -------
+   Adjusts shared layout, navigation, hero sections and card
+   grids for smaller screen sizes.
 ========================================================== */
 
 @media (max-width: 900px) {
@@ -152,7 +206,16 @@ nav a:hover {
     }
 }
 /* ==========================================================
-   Main Content
+   Main Content Wrapper
+
+   HTML PAGE
+   ---------
+   base.html
+
+   PURPOSE
+   -------
+   Provides consistent spacing around the main content block
+   used by child templates.
 ========================================================== */
 
 .page-content {
@@ -160,7 +223,16 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Wide Hero Banner Image
+   Homepage Hero Banner Image
+
+   HTML PAGE
+   ---------
+   home.html
+
+   PURPOSE
+   -------
+   Styles the wide hero image shown at the top of the
+   homepage.
 ========================================================== */
 
 .hero-banner {
@@ -177,7 +249,16 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Homepage Introduction
+   Homepage Introduction Section
+
+   HTML PAGE
+   ---------
+   home.html
+
+   PURPOSE
+   -------
+   Styles the introductory homepage card explaining the
+   Indigenous Digital Library.
 ========================================================== */
 
 .hero {
@@ -201,7 +282,18 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Buttons
+   General Button Styling
+
+   HTML PAGES
+   ----------
+   home.html
+   collections.html
+   collection_detail.html
+   admin_dashboard.html
+
+   PURPOSE
+   -------
+   Provides reusable button styling across the application.
 ========================================================== */
 
 .button {
@@ -221,6 +313,14 @@ nav a:hover {
 
 /* ==========================================================
    Acknowledgement of Country
+
+   HTML PAGE
+   ---------
+   home.html
+
+   PURPOSE
+   -------
+   Styles the acknowledgement card displayed on the homepage.
 ========================================================== */
 
 .acknowledgement-card {
@@ -242,7 +342,16 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Section Heading
+   Section Headings
+
+   HTML PAGE
+   ---------
+   home.html
+
+   PURPOSE
+   -------
+   Styles repeated section headings used throughout the
+   homepage.
 ========================================================== */
 
 .section-heading {
@@ -254,7 +363,16 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Feature Cards
+   Homepage Feature Cards
+
+   HTML PAGE
+   ---------
+   home.html
+
+   PURPOSE
+   -------
+   Styles the informational cards describing key system
+   features.
 ========================================================== */
 
 .card-grid {
@@ -281,7 +399,15 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Statistics Cards
+   Homepage Statistics Cards
+
+   HTML PAGE
+   ---------
+   home.html
+
+   PURPOSE
+   -------
+   Styles the summary statistics shown on the homepage.
 ========================================================== */
 
 .stats-grid {
@@ -310,7 +436,15 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Footer
+   Site Footer
+
+   HTML PAGE
+   ---------
+   base.html
+
+   PURPOSE
+   -------
+   Styles the shared footer displayed across the application.
 ========================================================== */
 
 .site-footer {
@@ -353,21 +487,21 @@ nav a:hover {
 }
 
 /* ==========================================================
-/* ==========================================================
-/* ==========================================================
-/* ==========================================================
-/* ==========================================================
-   Browse Collection Page
-   ----------------------------------------------------------
-   These styles format the live database records displayed
-   on collections.html.
+   Browse Collections Page
 
-   HTML provides the structure.
-   CSS provides the visual presentation.
-   Flask and MySQL provide the data.
-========================================================== */
-/* ==========================================================
-   Browse Collection Page
+   HTML PAGE
+   ---------
+   collections.html
+
+   PURPOSE
+   -------
+   Styles the Browse Collections page, including the page
+   header, search result count, collection grid and collection
+   item cards.
+
+   Flask retrieves collection records from MySQL and passes
+   them into collections.html. CSS controls how those records
+   are visually presented.
 ========================================================== */
 
 .page-header {
@@ -399,7 +533,38 @@ nav a:hover {
 }
 
 /* ==========================================================
+   Collection Detail Preview Image
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Styles the representative preview image shown on each
+   Collection Item Details page.
+========================================================== */
+
+.collection-image {
+    width: 420px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    margin: 15px 0 25px 0;
+    box-shadow: 0 6px 16px rgba(0,0,0,.15);
+}
+
+/* ==========================================================
    Collection Grid
+
+   HTML PAGE
+   ---------
+   collections.html
+
+   PURPOSE
+   -------
+   Arranges collection items into a responsive card grid.
 ========================================================== */
 .collection-grid {
 
@@ -411,7 +576,16 @@ nav a:hover {
 }
 
 /* ==========================================================
-   Collection Card
+   Collection Cards
+
+   HTML PAGE
+   ---------
+   collections.html
+
+   PURPOSE
+   -------
+   Styles each individual collection item card displayed in
+   the browse collection grid.
 ========================================================== */
 .collection-card {
 
@@ -475,6 +649,18 @@ nav a:hover {
 
 /* ==========================================================
    Status Badges
+
+   HTML PAGES
+   ----------
+   collections.html
+   collection_detail.html
+   reviewer_dashboard.html
+   admin_dashboard.html
+
+   PURPOSE
+   -------
+   Provides visual labels for item and request statuses such
+   as Public, Restricted, Pending, Approved and Rejected.
 ========================================================== */
 .status-badge{
 
@@ -552,36 +738,38 @@ nav a:hover {
 }
 
 /* ==========================================================
-/* ==========================================================
-/* ==========================================================
-/* ==========================================================
    Collection Detail Page
-   ----------------------------------------------------------
-   These styles control the appearance of the Item Details
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Controls the appearance of the individual item details
    page.
 
-   The page displays a single collection item retrieved
-   from the MySQL database using its unique item_id.
+   This page displays one collection item retrieved from
+   MySQL using its item_id primary key.
 
    MVC Flow
 
    Browser
-       │
-       ▼
+        │
+        ▼
    Flask Route
-       │
-       ▼
+        │
+        ▼
    database.py
-       │
-       ▼
-   MySQL
-       │
-       ▼
+        │
+        ▼
+   MySQL Database
+        │
+        ▼
    collection_detail.html
-       │
-       ▼
+        │
+        ▼
    CSS Styling
-
 ========================================================== */
 
 .detail-card {
@@ -604,7 +792,16 @@ nav a:hover {
 
 
 /* ==========================================================
-   Back Link
+   Detail Page Back Link
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Styles the link that returns users from an item details
+   page back to the Browse Collections page.
 ========================================================== */
 
 .back-link {
@@ -633,7 +830,15 @@ nav a:hover {
 
 
 /* ==========================================================
-   Item Title
+   Collection Detail Title
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Styles the title heading for an individual collection item.
 ========================================================== */
 
 .detail-card h1 {
@@ -650,7 +855,15 @@ nav a:hover {
 
 
 /* ==========================================================
-   Metadata Section
+   Collection Metadata Section
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Styles the metadata area displaying status and date added.
 ========================================================== */
 
 .detail-meta {
@@ -684,7 +897,16 @@ nav a:hover {
 
 
 /* ==========================================================
-   Divider
+   Detail Page Divider
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Adds visual separation between item details, description
+   and access information.
 ========================================================== */
 
 .detail-divider {
@@ -699,7 +921,15 @@ nav a:hover {
 
 
 /* ==========================================================
-   Description
+   Collection Description
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Styles the descriptive text for a collection item.
 ========================================================== */
 
 .detail-card h2 {
@@ -722,7 +952,16 @@ nav a:hover {
 
 
 /* ==========================================================
-   Restricted Access Box
+   Restricted Access Notice
+
+   HTML PAGE
+   ---------
+   collection_detail.html
+
+   PURPOSE
+   -------
+   Styles the notice shown when an item requires an access
+   request and cultural review.
 ========================================================== */
 
 .restricted-notice {
@@ -790,10 +1029,16 @@ nav a:hover {
 
 
 /* ==========================================================
-/* ==========================================================
-/* ==========================================================
-/* ==========================================================
    Search Form
+
+   HTML PAGE
+   ---------
+   collections.html
+
+   PURPOSE
+   -------
+   Styles the search input, search button and clear search
+   link used on the Browse Collections page.
 ========================================================== */
 
 .search-form {
@@ -874,6 +1119,15 @@ nav a:hover {
 
 /* ======================================================
    Reviewer Dashboard
+
+   HTML PAGE
+   ---------
+   reviewer_dashboard.html
+
+   PURPOSE
+   -------
+   Styles the reviewer dashboard, including summary cards,
+   pending review cards and review action areas.
 ====================================================== */
 
 .page-section {
@@ -1115,6 +1369,15 @@ nav a:hover {
 
 /* ==========================================
    Review Item Page
+
+   HTML PAGE
+   ---------
+   review_item.html
+
+   PURPOSE
+   -------
+   Styles the reviewer decision form where authorised
+   reviewers approve or reject access requests.
 ========================================== */
 
 .form-group{
@@ -1234,6 +1497,15 @@ nav a:hover {
 
 /* ======================================================
    Recent Reviewer Activity
+
+   HTML PAGE
+   ---------
+   reviewer_dashboard.html
+
+   PURPOSE
+   -------
+   Styles the recent activity list showing previous approval
+   and rejection decisions.
 ====================================================== */
 
 .recent-activity-card {
@@ -1347,6 +1619,15 @@ nav a:hover {
 
 /* ==========================================================
    Administrator Dashboard
+
+   HTML PAGE
+   ---------
+   admin_dashboard.html
+
+   PURPOSE
+   -------
+   Styles the administrator dashboard including system counts,
+   quick actions and recent access request tables.
 ========================================================== */
 
 .dashboard-grid {
@@ -1470,6 +1751,15 @@ table tbody tr:hover {
 
 /* ==========================================================
    System Overview Cards
+
+   HTML PAGE
+   ---------
+   admin_dashboard.html
+
+   PURPOSE
+   -------
+   Styles dashboard cards summarising application and database
+   status.
 ========================================================== */
 
 .system-overview-grid {
@@ -1505,6 +1795,15 @@ table tbody tr:hover {
 
 /* ==========================================================
    System Health Panel
+
+   HTML PAGE
+   ---------
+   admin_dashboard.html
+
+   PURPOSE
+   -------
+   Styles the system health panel showing database and
+   application status information.
 ========================================================== */
 
 .system-health-panel {
@@ -1546,6 +1845,17 @@ table tbody tr:hover {
 
 /* ==========================================================
    Error Pages
+
+   HTML PAGES
+   ----------
+   403.html
+   404.html
+   500.html
+
+   PURPOSE
+   -------
+   Styles custom error pages for forbidden access, missing
+   pages and internal server errors.
 ========================================================== */
 
 .error-page {
@@ -1570,6 +1880,16 @@ table tbody tr:hover {
 
 /* ==========================================================
    Flash Messages
+
+   HTML PAGE
+   ---------
+   base.html
+
+   PURPOSE
+   -------
+   Styles temporary messages displayed after actions such as
+   login, logout, access request submission and review
+   decisions.
 ========================================================== */
 
 .flash-messages {
@@ -1583,4 +1903,38 @@ table tbody tr:hover {
     padding: 12px;
     border-radius: 6px;
     margin-bottom: 10px;
+}
+
+/* ==========================================================
+   Login Page
+
+   HTML PAGE
+   ---------
+   login.html
+
+   PURPOSE
+   -------
+   Styles the login form, including label alignment and input
+   box sizing.
+========================================================== */
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    width: 120px;          /* Makes all labels the same width */
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 300px;
+    height: 42px;
+    padding: 0 12px;
+    font-size: 16px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
